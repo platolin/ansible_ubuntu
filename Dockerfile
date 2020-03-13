@@ -32,10 +32,11 @@ RUN useradd --create-home --shell /bin/bash \
 RUN echo 'docker ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
 # Setting ssh public key.
-RUN COPY ~/.ssh/id_rsa.pub /tmp/authorized_keys && \
-      mkdir /home/docker/.ssh && \
-      mv /tmp/authorized_keys /home/docker/.ssh/ && \
-      chown -R docker:docker /home/docker/.ssh/ && \
+RUN mkdir /home/docker/.ssh
+
+ADD --chown=docker:docker id_rsa.pub /home/docker/.ssh/authorized_keys
+
+RUN   chown -R docker:docker /home/docker/.ssh/ && \
       chmod 644 /home/docker/.ssh/authorized_keys && \
       chmod 700 /home/docker/.ssh
 
